@@ -3,15 +3,16 @@
 
 #!/bin/bash
 
-age="$(( $RANDOM % 50 + 21 ))"     #create a variable to generate a random number between 20 & 70
-guess=""                           #create an empty variable to hold the user's guess
+
+age="$(( $RANDOM % 50 + 21 ))"     #generate a random number and store in a variable
+guess=""                           #create an empty variable to store user guesses
 guesscnt=0                         #create a counter for the guesses and set to zero
 
 
 if ! [ -f "userguess.txt" ]; then  #if a file does not already exist
-    touch userguess.txt            #create an empty file to hold the user's guesses
+    touch userguess.txt            #create an empty file to hold guesses
 else
-    echo "" >| userguess.txt       #else if the file exists overwrite it with an empty file        
+    echo "" >| userguess.txt       #else if the file exists overwrite with an empty file        
 fi
 
 #Tell the user what they need to do
@@ -28,30 +29,37 @@ while [ "$guess" != "$age" ]; do
     
     #else if the guess is not an integer tell the user the guess is invalid
     elif ! [[ "$guess" =~ ^[0-9]+$ ]]; then                                         
-        echo -e "\033[31mYour guess is not a valid number. Try again.\033[0m\n"     
+        echo -e "\033[31mYour guess is not a valid number.\033[0m Try again.\n"     
     
-    #else if the guess is not between 20 and 70 tell the user the guess is not within range
+    #else if the guess is not between 20 and 70 tell the user the guess is out of range
     elif [[ "$guess" -le 20 ]] || [[ "$guess" -ge 70 ]]; then                        
-        echo -e "\033[31mYour guess is not within range.\033[0m Try again. \n"            
+        echo -e "\033[31mYour guess is not within range.\033[0m Try again.\n"            
     
-    #otherwise if the guess is valid 
+    #otherwise if input is a valid guess
     else                                                      
-        if [[ -s "userguess.txt" ]]; then           #and the 'userguess' file is not empty
-            grep -q $guess userguess.txt            #search the file for duplicate user input
-            if [ $? -eq 0 ]; then                   #if the search returns true 
-                echo -e "\033[31mYou've already"\
-                "tried that number. Try again.\033[0m\n"  #tell the user to try again  
-                continue                            #continue from start of loop         
-            else
-                echo $guess >> userguess.txt    #Else append guess to the userguess.txt file
+        if ! [[ -s "userguess.txt" ]]; then     #if the 'userguess' file is empty
+            echo $guess >> userguess.txt        #append guess to the file
                 ((guesscnt++))                  #and increase the guess counter by 1
+            
+        else                                    #else if the file is not empty
+            grep -q $guess userguess.txt        #search the file for duplicate user input
+
+            if [ $? -eq 0 ]; then                           #if search returns true 
+                echo -e "\033[31mYou've already"\
+                "tried that number.\033[0m Try again.\n"    #tell the user to try again  
+                continue                                    #go back to start of loop
+                     
+            else                                            #if search returns false
+                echo $guess >> userguess.txt                #append guess to 'userguess' file
+                ((guesscnt++))                              #and increase the guess counter by 1    
             fi    
+
         fi     
-        
-        if [ $guesscnt -eq 1 ]; then        #if the guesscount is 1
-            singplu=guess                   #create a variable for 'guess' (singular)
+
+        if [ $guesscnt -eq 1 ]; then            #if the guesscount is 1
+            singplu=guess                       #create a variable for 'guess' (singular)
         else
-            singplu=guesses                 #otherwise a variable for 'guesses' (plural)
+            singplu=guesses                     #otherwise a variable for 'guesses' (plural)
         fi
 
         if [ "$guess" -eq "$age" ]; then                           #if the guess equals the age
@@ -71,5 +79,5 @@ while [ "$guess" != "$age" ]; do
     
     fi  
 
-done                                                        #game finished
+done                                             #game finished
 
