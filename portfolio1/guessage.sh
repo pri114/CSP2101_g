@@ -4,7 +4,7 @@
 #!/bin/bash
 
 age="$(( $RANDOM % 50 + 21 ))"     #create a variable to generate a random number between 20 & 70
-guess=""                           #create an empty variable to hold the user's guess
+guess=""                           #create an empty variable to hold user guesses
 guesscnt=0                         #create a counter for the guesses and set to zero
 
 
