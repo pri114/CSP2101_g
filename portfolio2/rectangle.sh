@@ -8,7 +8,7 @@ BLUE='\033[00;34m'	    # Use ${BLUE} in the code
 NC='\033[00;0m'		    # Use ${NC} in the code
 
 # Prompt the user to enter the text file to be formatted
-read -p 'Enter the name of file to be formatted: ' selfile
+read -p 'Enter the filename to be formatted: ' selfile
 
 # If the file does not exist let the user know and exit 
 if ! [ -f $selfile ]; then 
@@ -19,7 +19,7 @@ if ! [ -f $selfile ]; then
 else 
     # test to see if it's a text file
     if [[ $selfile == *.txt ]]; then 
-        grep -q -E 'Rec[0-9]+\,[0-9]+\,[0-9]+\,[0-9]+\,+[a-zA-Z]' $selfile     # Search the file to ensure it's in the right format
+        grep -q -E 'Rec[0-9]+\,[0-9]+\,[0-9]+\,[0-9]+\,+[a-zA-Z]' $selfile  # Search the file to ensure it's in the right format
         if [ $? -eq 0 ]; then                                               # If true
             echo -e "\nFormatting...\n"                                     
             formfile="${selfile%.txt}_f.txt"                                # create a new file and store in the variable 'formfile 
@@ -34,7 +34,7 @@ else
 
         # If the file is not the right format let the user know and exit
         else    
-            echo "The file $selfile cannot be formatted.\n"
+            echo "${RED}Error: ${NC}The file $selfile cannot be formatted.\n"
             exit 0
         fi
     
