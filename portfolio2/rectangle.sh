@@ -17,20 +17,26 @@ if ! [ -f $selfile ]; then
 
 # Otherwise if the file exists
 else 
-    # test to see if it's a text file
+    # check it's a text file and search the file to ensure it's in the right format
     if [[ $selfile == *.txt ]]; then 
-        grep -q -E 'Rec[0-9]+\,[0-9]+\,[0-9]+\,[0-9]+\,+[a-zA-Z]' $selfile  # Search the file to ensure it's in the right format
-        if [ $? -eq 0 ]; then                                               # If true
-            echo -e "\nFormatting...\n"                                     
-            formfile="${selfile%.txt}_f.txt"                                # create a new file and store in the variable 'formfile 
+        grep -q -E 'Rec[0-9]+\,[0-9]+\,[0-9]+\,[0-9]+\,+[a-zA-Z]' $selfile  
+        if [ $? -eq 0 ]; then                  # If true the text file can be formatted
+            echo -e "\nFormatting...\n"             
+            formfile="${selfile%.txt}_f.txt"   # create a new file and store in the variable 'formfile'
 
-            # Parse out the lines from the selected file deleting the first line and insert headings at start of each column
-            sed -e '1d'\
+            # Parse out the lines from the selected file to sed
+            # Delete the first line
+            # Find every instance of the word 'Rec' gloablly and add the word 'Name: ' before it
+            # Read every line, locate the first comma in each line and substitute with a tab and a heading. 
+                # i.e. the first comma in each line will be replaced with a tab and the word 'Height'
+                # the following comma (now the first) will be replaced with a tab and the word 'Width' and so forth 
+                # until all four commas in each line have been replaced.
+                sed -e '1d'\
                 -e 's/Rec/Name: &/g'\
                 -e 's/,/\tHeight: /'\
                 -e 's/,/\tWidth: /'\
                 -e 's/,/\tArea: /'\
-                -e 's/,/\tColour: /' $selfile > $formfile      # Write the formatted results to the newly created file
+                -e 's/,/\tColour: /' $selfile > $formfile # Write the formatted output to the newly created file stored in the variable 'formfile'
 
         # If the file is not the right format let the user know and exit
         else    
@@ -46,7 +52,8 @@ else
 
 fi
 
-# Print contents of the file into a table with column titles in blue for readablity
+# Print contents of the output file formatted into a table with column titles in blue for readablity
+# This is done by substituting each respective heading globally with the same heading printed in blue
 cat $formfile | sed -e "s/Name:/`printf "${BLUE}Name:${NC}"`/g"\
                     -e "s/Height:/`printf "${BLUE}Height:${NC}"`/g"\
                     -e "s/Width:/`printf "${BLUE}Width:${NC}"`/g"\
