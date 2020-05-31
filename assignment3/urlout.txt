@@ -1,0 +1,11 @@
+--2020-05-31 11:36:23--  https://secure.ecu.edu.au/service-centres/MACSC/gallery/152/DSC02042.jpg
+Resolving secure.ecu.edu.au (secure.ecu.edu.au)... 104.210.91.4
+Connecting to secure.ecu.edu.au (secure.ecu.edu.au)|104.210.91.4|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 44510 (43K) [image/jpeg]
+Saving to: ‘new/DSC02042.jpg’
+
+     0K .......... .......... .......... .......... ...       100%  729K=0.06s
+
+2020-05-31 11:36:24 (729 KB/s) - ‘new/DSC02042.jpg’ saved [44510/44510]
+
