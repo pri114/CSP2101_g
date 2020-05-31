@@ -87,7 +87,7 @@ download() {
                 filesize=$( cat urlout.txt | sed -n '/Length/ p' | awk '{printf "%.2f", $2/1000}' )
                 echo -e "Downloading ${BLUE}$imageNum${NC}, with the file name ${BLUE}$filename${NC}, with a file size of ${BLUE}$filesize KB${NC}....File Download Complete."             
             
-            # If the user presses any key continue to the next iteration of the loop if applicable
+            # If the user  doesn't input 'o' the program continues to the next iteration of the loop (if applicable)
             else
                 continue
             fi 
@@ -131,7 +131,7 @@ while true; do
         fi
     done
 
-    # Create a case statment for download options
+    # Create a case statement for download options
     case $selNum in
 
     ## Option 1: /// Download a SPECIFIC thumbnail image
@@ -140,7 +140,7 @@ while true; do
     while true; do                                                                  
         read -p "Enter the thumbnail image number you want to download: " imageNum  
         
-        # If the 'imagelNum' variable contains no data call the 'exitopt' function
+        # If the 'imagelNum' variable is empty call the 'exitopt' function
         if [[ -z $imageNum ]]; then                                            
             exitopt "${RED}Invalid Entry.${NC} Input required. Try again." 
         
@@ -154,7 +154,7 @@ while true; do
             
             #If the grep search returns a match (true) pipe the contents of the 'webdata.txt' file to the sed command. Parse out the lines matching  
                 # the 'imageNum' variable and print output to the 'images.txt' file. Call the download function with the 'images.txt' file as
-                # argument '$1' and break out of loop
+                # argument '$1'.and break out of loop
             if [ $? -eq 0 ]; then                           
                 cat webdata.txt | sed -n "/$imageNum/p" > images.txt
                 download images.txt           
@@ -195,15 +195,15 @@ while true; do
             while true; do
                 read -p "Enter the last four digits of the $limit image number in the range: " selLim
                 
-                # If the variable 'selNum' is empty call the 'exitopt' function
+                # If the variable 'selLim' is empty call the 'exitopt' function
                 if [[ -z $selLim ]]; then
                     exitopt "${RED}Invalid Entry.${NC} Input required. Try again." 
                 
-                # If the 'selNum' variable doesn't contain a four digit integer call the 'exitopt' function
+                # If the 'selLim' variable doesn't contain a four digit integer call the 'exitopt' function
                 elif ! [[ $selLim =~ ^[0-9]{4}$ ]]; then                                 
                     exitopt "${RED}Invalid Entry.${NC} ${BLUE}$selLim${NC} is not a valid four digit number. Try again."
                 
-                # If the 'selNum' variable is the right format quietly (-q) search for the selected image number in the 'webdata.txt' file 
+                # If the 'selLim' variable is the right format quietly (-q) search for the selected image number in the 'webdata.txt' file 
                 else
                     grep -q DSC0${selLim} webdata.txt
                     
@@ -248,7 +248,7 @@ while true; do
     while true; do
         read -p "Enter the number of images less than $imgCount that will be randomly selected for download: " randNum
         
-        # if 'randNum' is an integer and less than the max number of images inthe variable 'imgCount' than break out of the loop
+        # if 'randNum' is an integer and less than the max number of images in the variable 'imgCount' than break out of the loop
         if [[ $randNum =~ ^[0-9]+$ ]] && [[ $randNum -lt $imgCount ]]; then      
             break
         
