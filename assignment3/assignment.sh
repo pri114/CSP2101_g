@@ -1,3 +1,6 @@
+#Priscilla Pitchen
+#Student No. 943222
+
 #!/bin/bash
 
 
